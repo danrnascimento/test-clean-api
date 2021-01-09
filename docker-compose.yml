@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  postgres-service:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: '97109712'
+    ports:
+      - '15432:5432'
+    volumes:
+      - /home/daniel/.var/lib/postgress-service/data:/var/lib/postgresql/data
+    networks:
+      - postgres-network
+
+  pgadmin-service:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'danrnascimento@gmail.com'
+      PGADMIN_DEFAULT_PASSWORD: '97109712'
+    ports:
+      - '16543:80'
+    depends_on:
+      - postgres-service
+    networks:
+      - postgres-network
+
+networks:
+  postgres-network:
+    driver: bridge
