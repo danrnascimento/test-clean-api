@@ -1,3 +1,3 @@
-import ColorCases from './usecases/color';
+import { init } from './express';
 
-console.log(ColorCases.createColor({ name: 'Daniel', value: '#FFF' }));
+init();
