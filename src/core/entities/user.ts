@@ -1,4 +1,4 @@
-import Pallet from './pallet';
+import { PalletRepresentation } from './pallet';
 
 type User = {
   id: string;
@@ -6,7 +6,11 @@ type User = {
   lastName: string;
   email: string;
   password: string;
-  pallets: Pallet[];
+  palletsIds: string[];
+};
+
+export type UserRepresentation = Omit<User, 'password' | 'palletsIds'> & {
+  pallets: PalletRepresentation[];
 };
 
 export default User;

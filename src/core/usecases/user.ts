@@ -1,16 +1,15 @@
 import { v4 } from 'uuid';
-import Pallet from '../entities/pallet';
-import User from '../entities/user';
+import User, { UserRepresentation } from '../entities/user';
 
 type UserInput = Pick<User, 'name' | 'lastName' | 'email' | 'password'>;
 
-export default class PalletCases {
-  static createUser = ({
+export default class UserCases {
+  public static createUser({
     name,
     lastName,
     email,
     password,
-  }: UserInput): User => {
+  }: UserInput): User {
     const id = v4();
     return {
       id,
@@ -18,21 +17,15 @@ export default class PalletCases {
       lastName,
       email,
       password,
-      pallets: [],
+      palletsIds: [],
     };
-  };
+  }
 
-  static addPallet = (palletsToAdd: Pallet[], currentPallets: Pallet[]) => {
-    return [...palletsToAdd, ...currentPallets];
-  };
+  public static getRepresentation(user: User): UserRepresentation {
+    const representation = user;
+    delete representation.password;
+    delete representation.palletsIds;
 
-  static removePallets = (
-    idsToRemove: string[],
-    currentPallets: Pallet[],
-  ): Pallet[] => {
-    const newPallets = currentPallets.filter(
-      (pallet) => !idsToRemove.includes(pallet.id),
-    );
-    return newPallets;
-  };
+    return { ...representation, pallets: [] };
+  }
 }

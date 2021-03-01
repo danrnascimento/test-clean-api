@@ -1,9 +1,12 @@
 import Color from './color';
 
-type Pallet = {
+export type Pallet = {
   id: string;
   name: string;
-  colors: Color[];
+  userId: string;
+  colorsIds: string[];
 };
 
-export default Pallet;
+export type PalletRepresentation = Omit<Pallet, 'userId' | 'colorsIds'> & {
+  colors: Color[];
+};
