@@ -1,6 +1,7 @@
 import { v4 } from 'uuid';
 import { Color } from '../color';
 import { Pallet } from '../pallet';
+import { PalletRepresentation } from './entity';
 
 export type PalletInput = Pick<Pallet, 'name' | 'userId'>;
 
@@ -29,5 +30,12 @@ export class PalletService {
     currentColors: Color[],
   ): Color[] {
     return [...colorsToAdd, ...currentColors];
+  }
+
+  public static getRepresentation(pallet: Pallet): PalletRepresentation {
+    const representation = pallet;
+    delete representation.colorsIds;
+
+    return { ...representation, colors: [] };
   }
 }

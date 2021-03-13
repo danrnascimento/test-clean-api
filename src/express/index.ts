@@ -2,6 +2,7 @@ import express from 'express';
 import authRoutes from './routes/auth';
 import bodyParser from 'body-parser';
 import { UserRoutes } from '../modules/user';
+import { PalletRouter } from '../modules/pallet';
 
 const app = express();
 const port = 3000;
@@ -15,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/auth', authRoutes);
 app.use('/user', UserRoutes);
+app.use('/pallet', PalletRouter);
 
 export const init = () => {
   app.listen(port, () => {
