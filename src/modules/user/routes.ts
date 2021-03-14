@@ -1,6 +1,4 @@
 import express from 'express';
-import { getRepository } from 'typeorm';
-import { UserEntity } from '../../models/User';
 import { UserController } from './controller';
 
 const router = express.Router();

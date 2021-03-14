@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import express from 'express';
-import bodyParser from 'body-parser';
 import { UserRoutes } from '../modules/user';
 import { PalletRouter } from '../modules/pallet';
 import { ColorRouter } from '../modules/color';
@@ -15,7 +14,7 @@ app.get('/', (request: any, response: any) => {
 });
 
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/user', UserRoutes);
 app.use('/pallet', PalletRouter);

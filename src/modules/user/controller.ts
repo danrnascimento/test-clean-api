@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
-import { UserEntity } from '../../models/User';
-import { UserService } from './service';
+import { UserModel } from '../../models/User';
 
 export class UserController {
   constructor() {}
@@ -13,7 +12,7 @@ export class UserController {
       return res.status(400).json({ error: 'missing id' });
     }
 
-    const repository = getRepository(UserEntity);
+    const repository = getRepository(UserModel);
 
     try {
       const user = await repository.findOne({ id: userId });
@@ -30,7 +29,7 @@ export class UserController {
       return res.status(400).json({ error: 'missing properties' });
     }
 
-    const repository = getRepository(UserEntity);
+    const repository = getRepository(UserModel);
 
     const userAlreadyExistis = await repository.findOne({ email });
     if (userAlreadyExistis) {
@@ -42,27 +41,4 @@ export class UserController {
 
     return res.status(200).json({ data: user });
   }
-
-  // public patchUser(req: Request, res: Response) {
-  //   const { userId } = req.params;
-  //   const { name, lastName, email } = req.body;
-
-  //   if (!userId) {
-  //     return res.status(400).json({ error: 'missing id' });
-  //   }
-
-  //   if (!name || !lastName || !email) {
-  //     return res.status(400).json({ error: 'missing properties' });
-  //   }
-
-  //   const user = mockedUser;
-  //   const updatedUser = {
-  //     ...user,
-  //     name: name ? name : mockedUser.name,
-  //     lastName: lastName ? lastName : mockedUser.lastName,
-  //     email: email ? email : mockedUser.email,
-  //   };
-
-  //   return res.status(200).json(UserService.getRepresentation(updatedUser));
-  // }
 }

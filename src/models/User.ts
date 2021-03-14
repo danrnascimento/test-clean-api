@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { IUser } from '../modules/user/entity';
 
 @Entity('users')
-export class UserEntity implements IUser {
+export class UserModel implements IUser {
   @PrimaryColumn()
   readonly id: string;
 
