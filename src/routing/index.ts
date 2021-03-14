@@ -1,8 +1,11 @@
+import 'reflect-metadata';
 import express from 'express';
-import authRoutes from './routes/auth';
 import bodyParser from 'body-parser';
 import { UserRoutes } from '../modules/user';
 import { PalletRouter } from '../modules/pallet';
+import { ColorRouter } from '../modules/color';
+
+import '../database';
 
 const app = express();
 const port = 3000;
@@ -11,12 +14,12 @@ app.get('/', (request: any, response: any) => {
   response.send('Hello World!');
 });
 
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/auth', authRoutes);
 app.use('/user', UserRoutes);
 app.use('/pallet', PalletRouter);
+app.use('/pallet/:palletId/color', ColorRouter);
 
 export const init = () => {
   app.listen(port, () => {

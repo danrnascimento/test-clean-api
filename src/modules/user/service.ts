@@ -1,31 +1,23 @@
 import { v4 } from 'uuid';
-import { User, UserRepresentation } from './entity';
+import { IUser } from './entity';
 
-type UserInput = Pick<User, 'name' | 'lastName' | 'email' | 'password'>;
+type UserInput = Pick<IUser, 'name' | 'lastName' | 'email'>;
 
 export class UserService {
-  public static createUser({
-    name,
-    lastName,
-    email,
-    password,
-  }: UserInput): User {
+  public static createUser({ name, lastName, email }: UserInput): IUser {
     const id = v4();
     return {
       id,
       name,
       lastName,
       email,
-      password,
-      palletsIds: [],
+      created_at: new Date(),
     };
   }
 
-  public static getRepresentation(user: User): UserRepresentation {
+  public static getRepresentation(user: IUser): IUser {
     const representation = user;
-    delete representation.password;
-    delete representation.palletsIds;
 
-    return { ...representation, pallets: [] };
+    return { ...representation };
   }
 }

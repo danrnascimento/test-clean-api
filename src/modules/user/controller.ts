@@ -1,48 +1,68 @@
 import { Request, Response } from 'express';
-import { User } from './entity';
+import { getRepository } from 'typeorm';
+import { UserEntity } from '../../models/User';
 import { UserService } from './service';
 
-const mockedUser = UserService.createUser({
-  name: 'Daniel',
-  lastName: 'Nascimento',
-  email: 'danrnascimento@gmail.com',
-  password: '1234',
-});
-
 export class UserController {
-  public getUserById(req: Request, res: Response) {
+  constructor() {}
+
+  public async getUserById(req: Request, res: Response) {
     const { userId } = req.params;
 
     if (!userId) {
       return res.status(400).json({ error: 'missing id' });
     }
 
-    res.status(200).json({ data: UserService.getRepresentation(mockedUser) });
+    const repository = getRepository(UserEntity);
+
+    try {
+      const user = await repository.findOne({ id: userId });
+      return res.status(200).json({ data: user });
+    } catch (error) {
+      return res.status(400).json({ error: 'user not found' });
+    }
   }
 
-  public createUser(req: Request, res: Response) {
-    const { name, lastName, email, password } = req.body as Partial<User>;
+  public async createUser(req: Request, res: Response) {
+    const { name, lastName, email } = req.body;
 
-    if (!name || !lastName || !email || !password) {
+    if (!name || !lastName || !email) {
       return res.status(400).json({ error: 'missing properties' });
     }
 
-    const user = UserService.createUser({ name, lastName, email, password });
-    res.status(200).json(UserService.getRepresentation(user));
+    const repository = getRepository(UserEntity);
+
+    const userAlreadyExistis = await repository.findOne({ email });
+    if (userAlreadyExistis) {
+      return res.status(400).json({ error: 'user already exisits' });
+    }
+
+    const user = repository.create({ name, lastName, email });
+    await repository.save(user);
+
+    return res.status(200).json({ data: user });
   }
 
-  public patchUser(req: Request, res: Response) {
-    const user = mockedUser;
-    const { name, lastName, email, password } = req.body as Partial<User>;
+  // public patchUser(req: Request, res: Response) {
+  //   const { userId } = req.params;
+  //   const { name, lastName, email } = req.body;
 
-    const updatedUser = {
-      ...user,
-      name: name ? name : mockedUser.name,
-      lastName: lastName ? lastName : mockedUser.lastName,
-      email: email ? email : mockedUser.email,
-      password: password ? password : mockedUser.password,
-    };
+  //   if (!userId) {
+  //     return res.status(400).json({ error: 'missing id' });
+  //   }
 
-    res.status(200).json(UserService.getRepresentation(updatedUser));
-  }
+  //   if (!name || !lastName || !email) {
+  //     return res.status(400).json({ error: 'missing properties' });
+  //   }
+
+  //   const user = mockedUser;
+  //   const updatedUser = {
+  //     ...user,
+  //     name: name ? name : mockedUser.name,
+  //     lastName: lastName ? lastName : mockedUser.lastName,
+  //     email: email ? email : mockedUser.email,
+  //   };
+
+  //   return res.status(200).json(UserService.getRepresentation(updatedUser));
+  // }
 }

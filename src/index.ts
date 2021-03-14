@@ -1,3 +1,3 @@
-import { init } from './express';
+import { init } from './routing';
 
 init();

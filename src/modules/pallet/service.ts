@@ -15,23 +15,6 @@ export class PalletService {
     };
   }
 
-  public static removeColors(
-    idsToRemove: string[],
-    currentColors: Color[],
-  ): Color[] {
-    const newColors = currentColors.filter(
-      (color) => !idsToRemove.includes(color.id),
-    );
-    return newColors;
-  }
-
-  public static addColors(
-    colorsToAdd: Color[],
-    currentColors: Color[],
-  ): Color[] {
-    return [...colorsToAdd, ...currentColors];
-  }
-
   public static getRepresentation(pallet: Pallet): PalletRepresentation {
     const representation = pallet;
     delete representation.colorsIds;
