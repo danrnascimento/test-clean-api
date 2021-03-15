@@ -1,10 +1,8 @@
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
-import { UserModel } from '../../models/User';
+import { IUserController } from '../../core/user/controller';
+import userRepository from '../../repositories/Users';
 
-export class UserController {
-  constructor() {}
-
+export class UserController implements IUserController {
   public async getUserById(req: Request, res: Response) {
     const { userId } = req.params;
 
@@ -12,7 +10,7 @@ export class UserController {
       return res.status(400).json({ error: 'missing id' });
     }
 
-    const repository = getRepository(UserModel);
+    const repository = userRepository();
 
     try {
       const user = await repository.findOne({ id: userId });
@@ -29,7 +27,7 @@ export class UserController {
       return res.status(400).json({ error: 'missing properties' });
     }
 
-    const repository = getRepository(UserModel);
+    const repository = userRepository();
 
     const userAlreadyExistis = await repository.findOne({ email });
     if (userAlreadyExistis) {

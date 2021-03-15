@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 import express from 'express';
-import { UserRoutes } from '../modules/user';
-import { PalletRouter } from '../modules/pallet';
-import { ColorRouter } from '../modules/color';
+import UserRoutes from './UserRoutes';
+import PalletRoutes from './PalletRoutes';
+import ColorRoutes from './ColorRoutes';
 
 import '../database';
 
@@ -17,8 +17,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/user', UserRoutes);
-app.use('/pallet', PalletRouter);
-app.use('/pallet/:palletId/color', ColorRouter);
+app.use('/pallet', PalletRoutes);
+app.use('/pallet/:palletId/color', ColorRoutes);
 
 export const init = () => {
   app.listen(port, () => {

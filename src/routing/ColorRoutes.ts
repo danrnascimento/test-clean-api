@@ -1,5 +1,5 @@
 import express from 'express';
-import { ColorController } from './controller';
+import { ColorController } from '../controllers/Colors';
 
 const router = express.Router();
 const controller = new ColorController();
@@ -8,4 +8,4 @@ router.get('/:colorId', controller.getColorById);
 router.patch('/:colorId', controller.updateColor);
 router.post('/', controller.createColor);
 
-export { router };
+export default router;

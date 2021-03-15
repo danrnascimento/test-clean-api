@@ -3,5 +3,5 @@ export interface IUser {
   name: string;
   lastName: string;
   email: string;
-  created_at: Date;
+  createdAt: Date;
 }
