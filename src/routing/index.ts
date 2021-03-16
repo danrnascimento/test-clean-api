@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/user', UserRoutes);
 app.use('/pallet', PalletRoutes);
-app.use('/pallet/:palletId/color', ColorRoutes);
+app.use('/color', ColorRoutes);
 
 export const init = () => {
   app.listen(port, () => {

@@ -9,7 +9,6 @@ import {
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { IPallet } from '../core/pallet/entity';
-import { ColorModel } from './Color';
 import { UserModel } from './User';
 
 @Entity('pallets')
@@ -27,8 +26,8 @@ export class PalletModel implements IPallet {
   @JoinColumn({ name: 'userId' })
   user: UserModel;
 
-  @OneToMany(() => ColorModel, (color) => color.palletId)
-  colors: ColorModel[];
+  @Column('simple-array', { default: [] })
+  colorsIds: string[];
 
   @CreateDateColumn()
   createdAt: Date;

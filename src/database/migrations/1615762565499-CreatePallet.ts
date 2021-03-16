@@ -20,6 +20,11 @@ export class CreatePallet1615762565499 implements MigrationInterface {
             type: 'uuid',
           },
           {
+            name: 'colorsIds',
+            type: 'uuid',
+            isArray: true,
+          },
+          {
             name: 'createdAt',
             type: 'timestamp',
             default: 'now()',

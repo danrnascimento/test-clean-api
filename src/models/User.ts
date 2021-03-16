@@ -16,6 +16,9 @@ export class UserModel implements IUser {
   @Column()
   email: string;
 
+  @Column('simple-array', { default: [] })
+  palletsIds: string[];
+
   @CreateDateColumn()
   createdAt: Date;
 

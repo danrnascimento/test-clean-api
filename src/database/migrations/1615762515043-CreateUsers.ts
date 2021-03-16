@@ -24,6 +24,11 @@ export class CreateUsers1615762515043 implements MigrationInterface {
             type: 'varchar',
           },
           {
+            name: 'palletsIds',
+            type: 'uuid',
+            isArray: true,
+          },
+          {
             name: 'createdAt',
             type: 'timestamp',
             default: 'now()',
