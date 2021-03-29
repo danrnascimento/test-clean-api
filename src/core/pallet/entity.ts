@@ -1,7 +1,7 @@
 export interface IPallet {
   readonly id: string;
   name: string;
-  userId: string;
-  colorsIds: string[];
-  createdAt: Date;
+  user_id: string;
+  colors_ids: string[];
+  created_at: Date;
 }

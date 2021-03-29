@@ -20,11 +20,11 @@ export class CreateColor1615764618115 implements MigrationInterface {
             type: 'varchar',
           },
           {
-            name: 'palletId',
+            name: 'pallet_id',
             type: 'uuid',
           },
           {
-            name: 'createdAt',
+            name: 'created_at',
             type: 'timestamp',
             default: 'now()',
           },
@@ -32,7 +32,7 @@ export class CreateColor1615764618115 implements MigrationInterface {
         foreignKeys: [
           {
             name: 'PalletFK',
-            columnNames: ['palletId'],
+            columnNames: ['pallet_id'],
             referencedTableName: 'pallets',
             referencedColumnNames: ['id'],
             onDelete: 'CASCADE',

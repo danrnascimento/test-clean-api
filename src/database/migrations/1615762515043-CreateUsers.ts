@@ -16,7 +16,7 @@ export class CreateUsers1615762515043 implements MigrationInterface {
             type: 'varchar',
           },
           {
-            name: 'lastName',
+            name: 'last_name',
             type: 'varchar',
           },
           {
@@ -24,12 +24,13 @@ export class CreateUsers1615762515043 implements MigrationInterface {
             type: 'varchar',
           },
           {
-            name: 'palletsIds',
-            type: 'uuid',
+            name: 'pallets_ids',
+            type: 'varchar',
             isArray: true,
+            default: 'array[]::varchar[]',
           },
           {
-            name: 'createdAt',
+            name: 'created_at',
             type: 'timestamp',
             default: 'now()',
           },

@@ -2,6 +2,6 @@ export interface IColor {
   readonly id: string;
   name: string;
   value: string;
-  palletId: string;
-  createdAt: Date;
+  pallet_id: string;
+  created_at: Date;
 }

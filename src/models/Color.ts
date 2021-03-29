@@ -24,10 +24,10 @@ export class ColorModel implements IColor {
   value: string;
 
   @Column()
-  palletId: string;
+  pallet_id: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  created_at: Date;
 
   constructor() {
     if (!this.id) {

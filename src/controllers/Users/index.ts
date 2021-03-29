@@ -21,9 +21,9 @@ export class UserController implements IUserController {
   }
 
   public async createUser(req: Request, res: Response) {
-    const { name, lastName, email } = req.body;
+    const { name, last_name, email } = req.body;
 
-    if (!name || !lastName || !email) {
+    if (!name || !last_name || !email) {
       return res.status(400).json({ error: 'missing properties' });
     }
 
@@ -34,7 +34,7 @@ export class UserController implements IUserController {
       return res.status(400).json({ error: 'user already exisits' });
     }
 
-    const user = repository.create({ name, lastName, email });
+    const user = repository.create({ name, last_name, email });
     await repository.save(user);
 
     return res.status(200).json({ data: user });

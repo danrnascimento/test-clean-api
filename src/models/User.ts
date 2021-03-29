@@ -11,16 +11,16 @@ export class UserModel implements IUser {
   name: string;
 
   @Column()
-  lastName: string;
+  last_name: string;
 
   @Column()
   email: string;
 
-  @Column('simple-array', { default: [] })
-  palletsIds: string[];
+  @Column('simple-array')
+  pallets_ids: string[];
 
   @CreateDateColumn()
-  createdAt: Date;
+  created_at: Date;
 
   constructor() {
     if (!this.id) {
