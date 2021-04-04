@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { IUserController } from '../../core/user/controller';
-import userRepository from '../../repositories/Users';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import UserRepository from '../../repositories/Users';
 
 export class UserController implements IUserController {
   public async getUserById(req: Request, res: Response) {
@@ -12,14 +12,14 @@ export class UserController implements IUserController {
       return res.status(400).json({ error: 'missing id' });
     }
 
-    const repository = userRepository();
+    const repository = UserRepository();
+    const user = await repository.getUserById(userId);
 
-    try {
-      const user = await repository.findOne({ id: userId });
-      return res.status(200).json({ data: user });
-    } catch (error) {
+    if (!user) {
       return res.status(400).json({ error: 'user not found' });
     }
+
+    return res.status(200).json({ data: user });
   }
 
   public async createUser(req: Request, res: Response) {
@@ -29,17 +29,20 @@ export class UserController implements IUserController {
       return res.status(400).json({ error: 'missing properties' });
     }
 
-    const repository = userRepository();
+    const repository = UserRepository();
 
-    const userAlreadyExistis = await repository.findOne({ email });
-    if (userAlreadyExistis) {
-      return res.status(400).json({ error: 'user already exisits' });
+    try {
+      const user = await repository.createUser({
+        email,
+        password,
+        name,
+        last_name,
+      });
+
+      return res.status(200).json({ data: user });
+    } catch (error) {
+      return res.status(400).json({ error });
     }
-
-    const user = repository.create({ name, last_name, email, password });
-    await repository.save(user);
-
-    return res.status(200).json({ data: user });
   }
 
   public async auth(req: Request, res: Response) {
@@ -49,22 +52,14 @@ export class UserController implements IUserController {
       return res.status(400).json({ error: 'missing properties' });
     }
 
-    const repository = userRepository();
+    const repository = UserRepository();
 
-    const user = await repository.findOne({ email });
-
-    if (!user) {
-      return res.status(401).json({ error: 'user not found' });
+    try {
+      const user = await repository.checkUserCredentials(email, password);
+      const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: '1d' });
+      return res.status(200).json({ data: user, token });
+    } catch (error) {
+      return res.status(401).json({ error });
     }
-
-    const passwordIsValid = bcrypt.compareSync(password, user.password);
-
-    if (!passwordIsValid) {
-      return res.status(401).json({ error: 'wrong password' });
-    }
-
-    const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: '1d' });
-
-    return res.status(200).json({ data: user, token });
   }
 }
