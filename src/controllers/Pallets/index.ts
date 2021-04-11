@@ -12,20 +12,9 @@ export class PalletController implements IPalletController {
     }
 
     const repository = palletRepository();
-    const userRepository = UserRepository();
 
     try {
-      const pallet = repository.create({ name, user_id });
-      const saveUpdate = userRepository
-        .createQueryBuilder()
-        .update()
-        .set({
-          pallets_ids: () => `array_append(pallets_ids, '${pallet.id}')`,
-        })
-        .where('id = :id', { id: user_id });
-
-      await saveUpdate.execute();
-      await repository.save(pallet);
+      const pallet = await repository.createPallet(name, user_id);
       return res.status(200).json({ data: pallet });
     } catch (error) {
       return res.status(200).json({ error });
@@ -40,7 +29,7 @@ export class PalletController implements IPalletController {
     }
 
     const repository = palletRepository();
-    const pallet = await repository.findOne({ id: palletId });
+    const pallet = await repository.getPalletById(palletId);
 
     if (!pallet) {
       return res.status(400).json({ error: 'pallet not found' });
@@ -57,19 +46,11 @@ export class PalletController implements IPalletController {
     }
 
     const repository = palletRepository();
-    const userRepository = UserRepository();
-    const pallet = await repository.findOne({ id: palletId });
+    const success = await repository.deletePallet(palletId);
 
-    const saveUpdate = userRepository
-      .createQueryBuilder()
-      .update()
-      .set({
-        pallets_ids: () => `array_remove(pallets_ids, '${pallet.id}')`,
-      })
-      .where('id = :id', { id: pallet.user_id });
-
-    await repository.delete({ id: pallet.id });
-    await saveUpdate.execute();
+    if (!success) {
+      return res.status(500).json({ error: 'error' });
+    }
 
     return res.status(200).json({ data: 'success' });
   }
@@ -83,11 +64,12 @@ export class PalletController implements IPalletController {
     }
 
     const repository = palletRepository();
+    const pallet = await repository.updatePallet(palletId, name);
 
-    const pallet = await repository.findOne({ id: palletId });
-    pallet.name = name;
+    if (!pallet) {
+      return res.status(500).json({ error: 'error' });
+    }
 
-    repository.save(pallet);
     return res.status(200).json({ data: pallet });
   }
 }

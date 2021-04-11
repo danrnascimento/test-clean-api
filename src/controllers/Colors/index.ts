@@ -12,22 +12,9 @@ export class ColorController implements IColorController {
     }
 
     const repository = colorRepository();
-    const palletRepository = PalletRepository();
 
     try {
-      const color = repository.create({ name, value, pallet_id });
-
-      const saveUpdate = palletRepository
-        .createQueryBuilder()
-        .update()
-        .set({
-          colors_ids: () => `array_append(colors_ids, '${color.id}')`,
-        })
-        .where('id = :id', { id: pallet_id });
-
-      await repository.save(color);
-      await saveUpdate.execute();
-
+      const color = await repository.createColor(name, value, pallet_id);
       return res.status(200).json({ data: color });
     } catch (error) {
       return res.status(500).json({ error });
@@ -42,7 +29,7 @@ export class ColorController implements IColorController {
     }
 
     const repository = colorRepository();
-    const color = await repository.findOne({ id: colorId });
+    const color = await repository.getColorById(colorId);
 
     if (!color) {
       return res.status(400).json({ error: 'color not found' });
@@ -59,21 +46,12 @@ export class ColorController implements IColorController {
     }
 
     const repository = colorRepository();
-    const palletRepository = PalletRepository();
-
-    const color = await repository.findOne({ id: colorId });
 
     try {
-      const saveUpdate = palletRepository
-        .createQueryBuilder()
-        .update()
-        .set({
-          colors_ids: () => `array_remove(colors_ids, '${color.id}')`,
-        })
-        .where('id = :id', { id: color.pallet_id });
-
-      await repository.delete({ id: colorId });
-      await saveUpdate.execute();
+      const success = await repository.deleteColor(colorId);
+      if (!success) {
+        return res.status(500).json({ error: 'error' });
+      }
 
       return res.status(200).json({ data: 'success' });
     } catch (error) {
@@ -90,16 +68,12 @@ export class ColorController implements IColorController {
     }
 
     const repository = colorRepository();
-    const color = await repository.findOne({ id: colorId });
 
-    if (!color) {
-      return res.status(400).json({ error: 'color not found' });
+    try {
+      const color = await repository.updateColor(colorId, { name, value });
+      return res.status(200).json({ data: color });
+    } catch (error) {
+      return res.status(200).json({ error });
     }
-
-    color.name = name;
-    color.value = value;
-
-    await repository.save(color);
-    return res.status(200).json({ data: color });
   }
 }

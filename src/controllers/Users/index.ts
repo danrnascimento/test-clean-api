@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { IUserController } from '../../core/user/controller';
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import UserRepository from '../../repositories/Users';
 
