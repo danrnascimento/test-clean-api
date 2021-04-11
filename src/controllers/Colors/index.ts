@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { IColorController } from '../../core/color/controller';
 import colorRepository from '../../repositories/Colors';
-import PalletRepository from '../../repositories/Pallets';
 
 export class ColorController implements IColorController {
   public async createColor(req: Request, res: Response) {
