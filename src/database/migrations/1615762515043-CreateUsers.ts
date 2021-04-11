@@ -29,7 +29,7 @@ export class CreateUsers1615762515043 implements MigrationInterface {
             type: 'varchar',
           },
           {
-            name: 'pallets_ids',
+            name: 'notebooks_ids',
             type: 'varchar',
             isArray: true,
             default: 'array[]::varchar[]',

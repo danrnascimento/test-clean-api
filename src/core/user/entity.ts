@@ -4,6 +4,6 @@ export interface IUser {
   last_name: string;
   email: string;
   password: string;
-  pallets_ids: string[];
+  notebooks_ids: string[];
   created_at: Date;
 }

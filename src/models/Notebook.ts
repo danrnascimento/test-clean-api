@@ -1,9 +1,9 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
 import { v4 as uuid } from 'uuid';
-import { IPallet } from '../core/pallet/entity';
+import { INotebook } from '../core/Notebook/entity';
 
-@Entity('pallets')
-export class PalletModel implements IPallet {
+@Entity('notebooks')
+export class NotebookModel implements INotebook {
   @PrimaryColumn()
   readonly id: string;
 
@@ -14,7 +14,7 @@ export class PalletModel implements IPallet {
   user_id: string;
 
   @Column('simple-array')
-  colors_ids: string[];
+  notes_ids: string[];
 
   @CreateDateColumn()
   created_at: Date;

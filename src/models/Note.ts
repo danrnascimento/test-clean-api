@@ -1,9 +1,9 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
 import { v4 as uuid } from 'uuid';
-import { IColor } from '../core/color/entity';
+import { INote } from '../core/Note/entity';
 
-@Entity('colors')
-export class ColorModel implements IColor {
+@Entity('notes')
+export class NoteModel implements INote {
   @PrimaryColumn()
   readonly id: string;
 
@@ -14,7 +14,7 @@ export class ColorModel implements IColor {
   value: string;
 
   @Column()
-  pallet_id: string;
+  notebook_id: string;
 
   @CreateDateColumn()
   created_at: Date;

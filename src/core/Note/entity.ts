@@ -1,7 +1,7 @@
-export interface IColor {
+export interface INote {
   readonly id: string;
   name: string;
   value: string;
-  pallet_id: string;
+  notebook_id: string;
   created_at: Date;
 }

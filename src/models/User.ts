@@ -28,7 +28,7 @@ export class UserModel implements IUser {
   password: string;
 
   @Column('simple-array')
-  pallets_ids: string[];
+  notebooks_ids: string[];
 
   @CreateDateColumn()
   created_at: Date;

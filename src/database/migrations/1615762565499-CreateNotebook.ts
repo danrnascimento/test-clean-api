@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class CreateColor1615764618115 implements MigrationInterface {
+export class CreateNotebook1615762565499 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'colors',
+        name: 'notebooks',
         columns: [
           {
             name: 'id',
@@ -16,12 +16,14 @@ export class CreateColor1615764618115 implements MigrationInterface {
             type: 'varchar',
           },
           {
-            name: 'value',
-            type: 'varchar',
+            name: 'user_id',
+            type: 'uuid',
           },
           {
-            name: 'pallet_id',
+            name: 'notes_ids',
             type: 'uuid',
+            isArray: true,
+            default: 'array[]::uuid[]',
           },
           {
             name: 'created_at',
@@ -31,9 +33,9 @@ export class CreateColor1615764618115 implements MigrationInterface {
         ],
         foreignKeys: [
           {
-            name: 'PalletFK',
-            columnNames: ['pallet_id'],
-            referencedTableName: 'pallets',
+            name: 'UserFK',
+            columnNames: ['user_id'],
+            referencedTableName: 'users',
             referencedColumnNames: ['id'],
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE',
@@ -44,6 +46,6 @@ export class CreateColor1615764618115 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('colors');
+    await queryRunner.dropTable('notebooks');
   }
 }
