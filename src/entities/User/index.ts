@@ -1,24 +1,35 @@
-export type CreateUserInput = Pick<
-  User,
-  'email' | 'password' | 'name' | 'last_name'
->;
+import { v4 as uuid } from 'uuid';
+import bcrypt from 'bcryptjs';
 
-const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+export type CreateUserInput = Pick<User, 'email' | 'password' | 'name'>;
 
 export class User {
-  readonly id: string;
-  name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  notebooks_ids: string[];
-  created_at: Date;
+  public readonly id: string;
+  public name: string;
+  public email: string;
+  private _password: string;
+  public notebooks_ids: string[] = [];
+  public created_at: Date = new Date();
 
-  static validateEmail(email: string): boolean {
-    return EMAIL_REGEX.test(email.trim().toLocaleLowerCase());
+  public get password() {
+    return this._password;
   }
 
-  static validatePassword(password: string): boolean {
-    return password.trim().length > 8;
+  public set password(value: string) {
+    this._password = bcrypt.hashSync(value, 8);
+  }
+
+  constructor(input: CreateUserInput, id?: string) {
+    this.name = input.name;
+    this.email = input.email;
+    this.password = input.password;
+
+    if (!id) {
+      this.id = uuid();
+    }
+  }
+
+  public checkPassword(password: string) {
+    return bcrypt.compareSync(password, this.password);
   }
 }
