@@ -1,9 +1,14 @@
 import { Request, Response } from 'express';
-import { IUserController } from '../../core/user/controller';
+import { IUserCases } from '../../useCases/User';
 import jwt from 'jsonwebtoken';
-import UserRepository from '../../repositories/Users';
 
-export class UserController implements IUserController {
+export class UserController {
+  private userCases: IUserCases;
+
+  constructor(userCases: IUserCases) {
+    this.userCases = userCases;
+  }
+
   public async getUserById(req: Request, res: Response) {
     const { userId } = req.params;
 
@@ -11,8 +16,7 @@ export class UserController implements IUserController {
       return res.status(400).json({ error: 'missing id' });
     }
 
-    const repository = UserRepository();
-    const user = await repository.getUserById(userId);
+    const user = await this.userCases.getUser(userId);
 
     if (!user) {
       return res.status(400).json({ error: 'user not found' });
@@ -21,44 +25,41 @@ export class UserController implements IUserController {
     return res.status(200).json({ data: user });
   }
 
-  public async createUser(req: Request, res: Response) {
-    const { name, last_name, email, password } = req.body;
+  public createUser = async (req: Request, res: Response) => {
+    const { name, email, password } = req.body;
 
-    if (!name || !last_name || !email || !password) {
+    if (!name || !email || !password) {
       return res.status(400).json({ error: 'missing properties' });
     }
 
-    const repository = UserRepository();
-
     try {
-      const user = await repository.createUser({
+      const user = await this.userCases.createUser({
         email,
         password,
         name,
-        last_name,
       });
 
       return res.status(200).json({ data: user });
     } catch (error) {
+      console.log(error);
       return res.status(400).json({ error });
     }
-  }
+  };
 
-  public async auth(req: Request, res: Response) {
+  public async authenticate(req: Request, res: Response) {
     const { email, password } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({ error: 'missing properties' });
     }
 
-    const repository = UserRepository();
+    const authenticated = await this.userCases.authenticate(email, password);
 
-    try {
-      const user = await repository.checkUserCredentials(email, password);
-      const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: '1d' });
-      return res.status(200).json({ data: user, token });
-    } catch (error) {
-      return res.status(401).json({ error });
+    if (!authenticated) {
+      return res.status(401).json({ error: 'wrong credentials' });
     }
+
+    const token = jwt.sign({}, 'secret', { expiresIn: '1d' });
+    return res.status(200).json({ data: token });
   }
 }

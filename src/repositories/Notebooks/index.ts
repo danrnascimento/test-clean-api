@@ -1,7 +1,7 @@
 import { EntityRepository, getCustomRepository, Repository } from 'typeorm';
 import { INotebook } from '../../core/Notebook/entity';
 import { NotebookModel } from '../../models/Notebook';
-import UserRepository from '../Users';
+import UserRepository from '../User/implementation/TypeORM';
 
 interface INotebookService {
   getNotebookById: (id: string) => Promise<NotebookModel | undefined>;

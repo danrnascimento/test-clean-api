@@ -4,27 +4,23 @@ import bcrypt from 'bcryptjs';
 export type CreateUserInput = Pick<User, 'email' | 'password' | 'name'>;
 
 export class User {
-  public readonly id: string;
-  public name: string;
-  public email: string;
-  private _password: string;
-  public notebooks_ids: string[] = [];
-  public created_at: Date = new Date();
+  readonly id: string;
+  name: string;
+  email: string;
+  _password: string;
+  notebooks_ids: string[] = [];
+  created_at: Date = new Date();
 
-  public get password() {
+  get password() {
     return this._password;
   }
 
-  public set password(value: string) {
+  set password(value: string) {
     this._password = bcrypt.hashSync(value, 8);
   }
 
-  constructor(input: CreateUserInput, id?: string) {
-    this.name = input.name;
-    this.email = input.email;
-    this.password = input.password;
-
-    if (!id) {
+  constructor() {
+    if (!this.id) {
       this.id = uuid();
     }
   }

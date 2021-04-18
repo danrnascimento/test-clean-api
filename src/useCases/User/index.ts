@@ -1,50 +1,51 @@
-import { CreateUserInput } from '../../entities/User';
-import { IUserRepository } from '../../repositories2/User';
+import { CreateUserInput, User } from '../../entities/User';
+import { IUserRepository } from '../../repositories/User';
 
-export class UserCases {
+export interface IUserCases {
+  getUser: (id: string) => Promise<User>;
+  createUser: (input: CreateUserInput) => Promise<User>;
+  authenticate: (email: string, password: string) => Promise<boolean>;
+}
+
+export class UserCases implements IUserCases {
   constructor(private repository: IUserRepository) {}
 
-  async getUser(id: string) {
+  public getUser = async (id: string) => {
     const user = await this.repository.getUserById(id);
     if (!user) {
-      return Promise.reject(new Error('user not found'));
+      throw new Error('user not found');
     }
 
     return user;
-  }
+  };
 
-  async createUser(input: CreateUserInput) {
+  public createUser = async (input: CreateUserInput) => {
     const { email } = input;
-    // const inputsAreValid = User.validateCreateInput(input);
-
-    // if (inputsAreValid !== true) {
-    //   return Promise.reject(inputsAreValid);
-    // }
 
     const existedUser = await this.repository.getUserByEmail(email);
 
     if (existedUser) {
-      return Promise.reject(new Error('user already exists'));
+      throw new Error('user already exists');
     }
 
     try {
       const user = await this.repository.createUser(input);
       return user;
     } catch (error) {
-      return Promise.reject(error);
+      throw error;
     }
-  }
+  };
 
-  async authenticate(email: string, password: string) {
+  public authenticate = async (email: string, password: string) => {
     const authenticated = await this.repository.checkCredentials(
       email,
       password,
     );
 
     if (!authenticated) {
-      return Promise.reject(new Error('wrong credentials'));
+      throw new Error('wrong credentials');
     }
 
-    return 'authenticated';
-  }
+    return true;
+  };
 }

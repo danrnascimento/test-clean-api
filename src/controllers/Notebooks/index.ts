@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { INotebookController } from '../../core/Notebook/controller';
 import notebookRepository from '../../repositories/Notebooks';
-import UserRepository from '../../repositories/Users';
+import UserRepository from '../../repositories/User/implementation/TypeORM';
 
 export class NotebookController implements INotebookController {
   public async createNotebook(req: Request, res: Response) {

@@ -4,7 +4,7 @@ import UserRoutes from './UserRoutes';
 import NotebookRoutes from './NotebookRoutes';
 import NoteRoutes from './NoteRoutes';
 
-import '../database';
+import { createConnection } from '../database';
 
 const app = express();
 const port = 3000;
@@ -16,9 +16,11 @@ app.get('/', (request: any, response: any) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/user', UserRoutes);
-app.use('/notebook', NotebookRoutes);
-app.use('/note', NoteRoutes);
+createConnection().then(() => {
+  app.use('/user', UserRoutes);
+  app.use('/notebook', NotebookRoutes);
+  app.use('/note', NoteRoutes);
+});
 
 export const init = () => {
   app.listen(port, () => {
