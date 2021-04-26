@@ -1,13 +1,13 @@
 {
   "type": "postgres",
-  "entities": ["./src/models/**.ts"],
-  "migrations": ["./src/database/migrations/**.ts"],
+  "entities": ["./src/database/models/**/*.ts"],
+  "migrations": ["./src/database/migrations/**/*.ts"],
   "host": "localhost",
   "port": "15432",
   "username": "postgres",
   "password": "97109712",
   "cli": {
-    "entitiesDir": "./src/models",
+    "entitiesDir": "./src/database/models",
     "migrationsDir": "./src/database/migrations"
   }
 }

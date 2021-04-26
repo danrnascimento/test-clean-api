@@ -16,10 +16,6 @@ export class CreateNotebook1615762565499 implements MigrationInterface {
             type: 'varchar',
           },
           {
-            name: 'user_id',
-            type: 'uuid',
-          },
-          {
             name: 'notes_ids',
             type: 'uuid',
             isArray: true,
@@ -29,16 +25,6 @@ export class CreateNotebook1615762565499 implements MigrationInterface {
             name: 'created_at',
             type: 'timestamp',
             default: 'now()',
-          },
-        ],
-        foreignKeys: [
-          {
-            name: 'UserFK',
-            columnNames: ['user_id'],
-            referencedTableName: 'users',
-            referencedColumnNames: ['id'],
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
           },
         ],
       }),

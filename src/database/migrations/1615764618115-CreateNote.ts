@@ -12,31 +12,13 @@ export class CreateNote1615764618115 implements MigrationInterface {
             isPrimary: true,
           },
           {
-            name: 'name',
+            name: 'content',
             type: 'varchar',
-          },
-          {
-            name: 'value',
-            type: 'varchar',
-          },
-          {
-            name: 'notebook_id',
-            type: 'uuid',
           },
           {
             name: 'created_at',
             type: 'timestamp',
             default: 'now()',
-          },
-        ],
-        foreignKeys: [
-          {
-            name: 'NotebookFK',
-            columnNames: ['notebook_id'],
-            referencedTableName: 'notebooks',
-            referencedColumnNames: ['id'],
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
           },
         ],
       }),

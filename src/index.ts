@@ -1,3 +1,1 @@
-import { init } from './routing';
-
-init();
+console.log('w');
