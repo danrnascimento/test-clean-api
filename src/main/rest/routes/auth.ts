@@ -1,21 +1,9 @@
 import { Express, Router } from 'express';
-import { AuthenticateUserProvider } from '@/data/providers';
-import { BcryptAdapter, expressRouterAdapter } from '@/infra/adapters';
-import { UserRepository } from '@/infra/database';
-import { AuthenticateUserController } from '@/presentation/controllers/user';
-import { Controller } from '@/presentation/protocols';
-
-const authenticateRoute = (): Controller => {
-  const repository = new UserRepository();
-  const crypto = new BcryptAdapter();
-  const provider = new AuthenticateUserProvider(repository, crypto);
-  const controller = new AuthenticateUserController(provider);
-
-  return controller;
-};
+import { expressRouterAdapter } from '@/infra/adapters';
+import { makeAuthenticateRoute } from '@/main/factories/authRoutes';
 
 export const authRoutes = (app: Express) => {
   const router = Router();
-  router.post('/', expressRouterAdapter(authenticateRoute()));
+  router.post('/', expressRouterAdapter(makeAuthenticateRoute()));
   app.use('/auth', router);
 };
